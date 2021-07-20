@@ -10,8 +10,7 @@ theme = "github.com/itsmattburgess/hugo-theme-spartan"
 github_username = "itsmattburgess"
 twitter_username = "itsmattburgess"
 linkedin_username = "itsmattburgess"
-intro = "Hey, I'm Matt Burgess"
-description = "Profile description"
+intro = "A cloud-native solutions architect and software engineer. Specialises in modernizing applications into performant, observable and well architected platforms."
 
 [[menu.main]]
   name = "Blog"
