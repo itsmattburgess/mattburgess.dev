@@ -1,0 +1,182 @@
+<!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en-gb><head>
+<meta charset=utf-8>
+<title>Hosting a HTTPS website using AWS S3 and CloudFront - Matt Burgess</title>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet type=text/css href=/css/spartan.min.css>
+<link rel=apple-touch-icon-precomposed sizes=144x144 href=/images/favicon.png>
+<link rel="shortcut icon" type=image/x-icon href=/images/favicon.png>
+<meta name=description content="Hey, I'm Matt Burgess. A cloud-native solutions architect and software engineer. Specialises in modernizing applications into performant, observable and well architected platforms.">
+<meta name=keywords content>
+<meta name=author content="Matt Burgess">
+<meta name=generator content="Hugo 0.86.0">
+<meta property="og:title" content="Hosting a HTTPS website using AWS S3 and CloudFront">
+<meta property="og:description" content="Hey, I'm Matt Burgess. A cloud-native solutions architect and software engineer. Specialises in modernizing applications into performant, observable and well architected platforms.">
+<meta property="og:type" content="blog">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://mattburgess.dev/post/hosting-https-on-cloudfront/">
+</head><body class="font-sans antialiased text-gray-700 dark:bg-gray-800 dark:text-gray-200">
+<header class="p-8 py-4 bg-gray-50 dark:bg-gray-900"><div class="flex sm:flex-row flex-col items-center w-full">
+<div class="flex-grow flex items-center">
+<a href=https://mattburgess.dev/ class="group font-medium transition-colors text-gray-900 dark:text-gray-200 hover:text-yellow-500 antialiased flex items-center">
+<span class="flex font-semibold items-center relative">
+<span>Matt Burgess</span>
+<span class="h-0.5 w-2/12 bg-yellow-500 block bottom-0 left-0 absolute group-hover:w-full transition-all"></span>
+</span>
+</a>
+<div class=ml-4><div class="flex items-center space-x-3 text-gray-400">
+<a href=https://twitter.com/itsmattburgess class=hover:text-blue-400 target=_blank title=Twitter rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958.0 002.163-2.723c-.951.555-2.005.959-3.127 1.184A4.92 4.92.0 0011.78 8.288C7.69 8.095 4.067 6.13 1.64 3.162A4.822 4.822.0 00.974 5.637c0 1.71.87 3.213 2.188 4.096A4.904 4.904.0 01.934 9.117v.06a4.923 4.923.0 003.946 4.827 4.996 4.996.0 01-2.212.085 4.936 4.936.0 004.604 3.417A9.867 9.867.0 011.17 19.611c-.39.0-.779-.023-1.17-.067a13.995 13.995.0 007.557 2.209c9.053.0 13.998-7.496 13.998-13.985.0-.21.0-.42-.015-.63A9.935 9.935.0 0024 4.59z"/></svg>
+</a>
+<a href=https://linkedin.com/in/itsmattburgess class=hover:text-blue-600 target=_blank title=Twitter rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601.0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144.0-2.063-.926-2.063-2.065.0-1.138.92-2.063 2.063-2.063 1.14.0 2.064.925 2.064 2.063.0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0h.003z"/></svg>
+</a>
+<a href=https://github.com/itsmattburgess class="hover:text-gray-900 dark:hover:text-gray-100" target=_blank title=Github rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63.0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577.0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93.0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176.0.0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22.0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22.0 1.606-.015 2.896-.015 3.286.0.315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+</a>
+</div></div>
+</div>
+<div class="mt-4 sm:mt-0">
+<aside>
+<ul class="space-x-4 flex items-center uppercase text-xs text-gray-500 font-semibold">
+<li>
+<a href=/ class="hover:text-yellow-500 hover:underline">
+<span>Blog</span>
+</a>
+</li>
+</ul>
+</aside></div>
+</div></header>
+<main id=content>
+<div class="mx-auto max-w-screen-md p-8">
+<div class="mb-8 text-center">
+<div class="flex items-center font-medium text-gray-400 leading-relaxed mb-2 space-x-4 justify-center">
+<time datetime="2017-11-21 23:45:52 +0100 +0100">21st November 2017</time>
+<div class="text-gray-400 font-bold">&#183;</div>
+<div>8 minute read</div>
+</div>
+<div class="text-4xl font-extrabold text-gray-900 dark:text-gray-200 leading-snug">Hosting a HTTPS website using AWS S3 and CloudFront</div>
+<div class="mt-6 flex space-x-2 justify-center">
+<a class="bg-gray-100 dark:bg-gray-700 hover:bg-opacity-100 text-sm font-medium py-2 px-3 rounded bg-opacity-50" href=https://mattburgess.dev/tags/aws>AWS</a>
+<a class="bg-gray-100 dark:bg-gray-700 hover:bg-opacity-100 text-sm font-medium py-2 px-3 rounded bg-opacity-50" href=https://mattburgess.dev/tags/cloudfront>CloudFront</a>
+</div>
+</div>
+<article>
+<p>I recently decided that it was time to setup a website for hosting my resume and entering the world of blogging to share my knowledge and learn from others. I had three requirements. First, I wanted to use AWS S3 to host my website. Secondly, I wanted my website HTTPS enabled as I strongly believe that every website should be — there is simply no reason not to be nowadays, especially since LetsEncrypt started their awesome work. And Finally, I wanted to use multiple domains I own to point to the same website.
+So, how can we achieve this?</p>
+<p>Setting up an S3 bucket to function as a website is nice and simple and will support HTTPS out of the box, however, you’ll be restricted to using the bucket URL as your endpoint, i.e. <a href=http://itsmattburgess.co.uk.s3-website.eu-west-2.amazonaws.com>http://itsmattburgess.co.uk.s3-website.eu-west-2.amazonaws.com</a>.</p>
+<p>To work around this, we’re able to use CloudFront to host our website from Amazon’s edge locations with a custom SSL certificate setup for our domains.</p>
+<p>This guide assumes you have already created your AWS account and walks you through the following steps:</p>
+<ul>
+<li>Registering a domain using Route53</li>
+<li>Creating and configuring an S3 bucket to host a static HTTP website</li>
+<li>Generating a SSL certificate using AWS Certificate Manager</li>
+<li>Setting up CloudFront to host our website over HTTPS</li>
+<li>Getting our DNS records setup</li>
+</ul>
+<h2 id=automating-the-process>Automating the process</h2>
+<p>One advantage of cloud computing is having the ability to manage your infrastructure through API calls. This allows us to leverage tools such as Terraform and CloudFormation to automate the creation and ongoing maintenance of our infrastructure. Wherever possible you should get into a habit of Automating Everything! Once you start down the automation road, I promise you you’ll never look back — it makes infrastructure fun, predicable and much more manageable. So, with this in mind, it makes perfect sense that I would use Terraform for this project. You can find my terraform scripts on Github (<a href=https://github.com/itsmattburgess/website-terraform)>https://github.com/itsmattburgess/website-terraform)</a>. The scripts will do everything I’m going to show you below, except for registering the domains and creating the SSL certificate as that cannot be automated at the present time. Feel free to use and adapt the scripts to get your own website up and running!</p>
+<h2 id=registering-a-domain-using-route53>Registering a domain using Route53</h2>
+<p>Before we get cracking, lets register a domain using Route53. If you already have a domain in Route53 you may skip this step.</p>
+<ol>
+<li>Login to your AWS account</li>
+<li>Search for and select ‘Route 53’ under Networking and Content Delivery</li>
+<li>If you’re accessing Route 53 for the first time, you’ll be presented with a splash screen, click the ‘Continue’ button.</li>
+<li>In the left sidebar, select ‘Registered Domains’</li>
+<li>Click ‘Register Domain’</li>
+<li>Pick a domain name, check it is available and select ‘Continue’</li>
+<li>Enter all the required contact info, check the terms and conditions then select ‘Continue’ then ‘Complete Purchase’</li>
+<li>Follow the on-screen instructions as some domains require email validation before they are issued. It can sometimes take 5 minutes or so for the domain to appear in your registered domains page in Route 53.</li>
+</ol>
+<p>Great! You now have a domain name, hosted with AWS ready to serve your new website.</p>
+<h2 id=creating-and-configuring-an-s3-bucket-to-host-a-static-http-website>Creating and configuring an S3 bucket to host a static HTTP website</h2>
+<p>Now that we have our domain ready, lets go ahead and get our website up on S3. If you don’t have a website ready to go, you can create a index.html file for the time being. If you’re looking for a little design inspiration, the source code for my website can be found on GitHub (<a href=https://github.com/itsmattburgess/website>https://github.com/itsmattburgess/website</a>) — Feel free to adapt for your needs.</p>
+<ol>
+<li>Click the AWS logo in the top left to go back to your dashboard</li>
+<li>Search for and select ‘S3’ under Storage</li>
+<li>Click ‘Create Bucket’</li>
+<li>Enter a bucket name — it needs to be called the same as your domain. For example: itsmattburgess.co.uk (Do not include the www)</li>
+<li>The region isn’t particularly important, but pick the region closest to you</li>
+<li>Click next, until you reach the ‘Permissions’ tab</li>
+<li>Change manage public permissions to ‘Grant public read access to this bucket’</li>
+<li>Click next, then Finish</li>
+<li>Now, lets tell S3 to host this bucket as a website. Click into your new bucket</li>
+<li>Upload your website files</li>
+<li>Click Properties, then ‘Static Website Hosting’</li>
+<li>Select ‘Use this bucket to host a website’</li>
+<li>Enter ‘index.html’ in both the index document and error document field</li>
+<li>Click ‘Save’</li>
+<li>Next, we’ll set a bucket policy to enable public access to all objects in this bucket. Click the ‘Permissions’ tab then select ‘Bucket Policy’. Paste the following policy document in the text area, ensuring that you replace ‘{BUCKET}’ with the name of your bucket.</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;Version&#34;</span>: <span style=color:#e6db74>&#34;2012–10–17&#34;</span>,
+  <span style=color:#f92672>&#34;Statement&#34;</span>: [
+    {
+        <span style=color:#f92672>&#34;Sid&#34;</span>: <span style=color:#e6db74>&#34;PublicReadGetObject&#34;</span>,
+        <span style=color:#f92672>&#34;Effect&#34;</span>: <span style=color:#e6db74>&#34;Allow&#34;</span>,
+        <span style=color:#f92672>&#34;Principal&#34;</span>: <span style=color:#e6db74>&#34;*&#34;</span>,
+        <span style=color:#f92672>&#34;Action&#34;</span>: <span style=color:#e6db74>&#34;s3:GetObject&#34;</span>,
+        <span style=color:#f92672>&#34;Resource&#34;</span>: <span style=color:#e6db74>&#34;arn:aws:s3:::{BUCKET}/*&#34;</span>
+    }
+  ]
+}
+</code></pre></div><p>You should now be able to access your website at the link provided on your screen. It will look something like: <a href=http://yourbucketname.s3-website.eu-west-2.amazonaws.com>http://yourbucketname.s3-website.eu-west-2.amazonaws.com</a>. In the next steps we’ll setup other domains you own to redirect to your main domain.</p>
+<h2 id=generating-a-ssl-certificate-using-aws-certificate-manager>Generating a SSL certificate using AWS Certificate Manager</h2>
+<p>One of the many great things about AWS is that they provide easy and free access to custom SSL certificates for AWS services. We can leverage this to create a SSL certificate for our domain and ask CloudFront to serve HTTPS requests using the certificate Amazon provide us with.</p>
+<p>To setup a certificate, we’ll need to verify our domain using either email or DNS records. As we’ve registered our domain through Route 53, the easiest verification method for us is to create a DNS record:</p>
+<ol>
+<li>Click the AWS logo in the top left to go back to the dashboard</li>
+<li>Click ‘Certificate Manager’ under the Security & Compliance section</li>
+<li>As CloudFront is a global service, it is stipulated that our SSL certificate is created in the North Virginia (us-east-1) region. To change to this region, Click the current region in the top right (left of the Support link) and select ‘US East (N. Virginia)’</li>
+<li>If you’re greeted by a splash screen, click ‘Get Started’</li>
+<li>Click ‘Request a certificate’</li>
+<li>Enter the domain name you are going to be using this certificate with. Remember to enter both the www and non-www versions. For example: <a href=http://www.itsmattburgess.co.uk>www.itsmattburgess.co.uk</a> and itsmattburgess.co.uk. This will ensure that which ever URL a user goes to, they will be presented with a valid certificate.</li>
+<li>Select ‘DNS Validation’ and click ‘Review’</li>
+<li>Check the domains are correct and select ‘Confirm and Request’</li>
+<li>Certificate manager will create the DNS records used to verify our domains automatically. Click each domain in the list and click the ‘Create record in Route 53’ button.</li>
+<li>Click ‘Continue’</li>
+</ol>
+<p>Great! We’ve setup a domain, our S3 buckets and now we have an SSL certificate. Be aware it can take a few minutes for the certificate to be issued. Before continuing to the next step, wait for the certificate to be issued.</p>
+<h2 id=setting-up-cloudfront-to-host-our-website-over-https>Setting up CloudFront to host our website over HTTPS</h2>
+<p>Almost there! At this point, we’re going to create a CloudFront distribution which will allow us to use our own domain and SSL certificate to host our website. What AWS is going to do for us at this point is use our S3 bucket as the ‘origin’, which is just another way of saying it grabs the contents of our S3 bucket and distributes it to ‘edge’ locations around the globe. There is a cost to this, so if you’re only planning on staying in the free tier, you should checkout the AWS Price Calculator so you have an idea of what the charges are likely to be (hint: it’ll hardly cost you anything for a personal website).</p>
+<p>Lets get our CloudFront distribution configured:</p>
+<ol>
+<li>Click the AWS logo in the top left to go back to the dashboard</li>
+<li>Select ‘CloudFront’ under the ‘Networking and Content Delivery’ section</li>
+<li>If you’re greeted with a splash screen, click ‘Get Started’</li>
+<li>Click ‘Create Distribution’</li>
+<li>We’re going to be hosting a website rather than streaming so click the ‘Get Started’ button in the web section</li>
+<li>We need to tell CloudFront where the website currently lives, click the Origin Domain Name field and select your S3 website URL from the dropdown</li>
+<li>Next, under the Viewer Protocol Policy, select ‘Redirect HTTP to HTTPS’</li>
+<li>Most settings on this page will work perfectly on default settings, but feel free to explore.</li>
+<li>Scroll down to Price Class and pick an option most appropriate to where your visitors are going to be. The more restrictive the price class the cheaper this distribution will be. Users will still be able to access your site from across the globe but it will be slower for users in Australia if you select ‘Use only US, Canada and Europe’, for example.</li>
+<li>In ‘Alternate Domain Names (CNAMEs)’ text area, enter the domains which we will be hosting on this distribution, for example <a href=http://www.itsmattburgess.co.uk>www.itsmattburgess.co.uk</a> and itsmattburgess.co.uk</li>
+<li>Next we’re going to need to select the SSL certificate we want to use for our HTTPS requests. Select ‘Custom SSL Certificate’ and in the dropdown select your domain.</li>
+<li>In the ‘Default root object’ field, enter the name of the your homepage html file, i.e. index.html</li>
+<li>Finally, click ‘Create Distribution’</li>
+</ol>
+<p>Awesome! Amazon will now start to distribute your website across the locations you specified. It’ll take around 15 minutes for your distribution to become active. Before moving onto the final step, wait until the Status shows as ‘Deployed’</p>
+<h2 id=getting-our-dns-records-setup>Getting our DNS records setup</h2>
+<p>Last but not least, we need to connect up the dots and set up our DNS records. We’ll create an A record for each of our domains as an alias to our CloudFront distribution.</p>
+<ol>
+<li>Click the AWS logo in the top left to go back to the dashboard</li>
+<li>Select ‘Route 53’ under Networking and Content Delivery</li>
+<li>Click ‘Hosted Zones’ in the left sidebar</li>
+<li>Now, you’ll need to complete the following steps for each domain you’re using.</li>
+<li>Select the first domain and click ‘Create Record Set’</li>
+<li>In the right hand sidebar, click ‘Yes’ against the Alias option</li>
+<li>Click the Alias Target and select the CloudFront distribution relating to your domain name.</li>
+<li>Click Create</li>
+</ol>
+<h2 id=in-summary>In Summary</h2>
+<p>That’s it! After a few minutes, you’ll be able to navigate to your new domain and see your new website in all its glory being served using HTTPS. If you decided to follow these steps manually, now is certainly the time to have a play around with Terraform and see how it’ll make your life so much easier!</p>
+</article>
+</div>
+</main><footer class="text-center py-8 text-xs font-medium text-gray-500 flex items-center flex-col">
+<div class=mb-2><div class="flex items-center space-x-3 text-gray-400">
+<a href=https://twitter.com/itsmattburgess class=hover:text-blue-400 target=_blank title=Twitter rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958.0 002.163-2.723c-.951.555-2.005.959-3.127 1.184A4.92 4.92.0 0011.78 8.288C7.69 8.095 4.067 6.13 1.64 3.162A4.822 4.822.0 00.974 5.637c0 1.71.87 3.213 2.188 4.096A4.904 4.904.0 01.934 9.117v.06a4.923 4.923.0 003.946 4.827 4.996 4.996.0 01-2.212.085 4.936 4.936.0 004.604 3.417A9.867 9.867.0 011.17 19.611c-.39.0-.779-.023-1.17-.067a13.995 13.995.0 007.557 2.209c9.053.0 13.998-7.496 13.998-13.985.0-.21.0-.42-.015-.63A9.935 9.935.0 0024 4.59z"/></svg>
+</a>
+<a href=https://linkedin.com/in/itsmattburgess class=hover:text-blue-600 target=_blank title=Twitter rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601.0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144.0-2.063-.926-2.063-2.065.0-1.138.92-2.063 2.063-2.063 1.14.0 2.064.925 2.064 2.063.0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0h.003z"/></svg>
+</a>
+<a href=https://github.com/itsmattburgess class="hover:text-gray-900 dark:hover:text-gray-100" target=_blank title=Github rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63.0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577.0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93.0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176.0.0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22.0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22.0 1.606-.015 2.896-.015 3.286.0.315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+</a>
+</div></div>
+Copyright © 2021 Matt Burgess. All Rights Reserved.
+</div></body>
+</html>

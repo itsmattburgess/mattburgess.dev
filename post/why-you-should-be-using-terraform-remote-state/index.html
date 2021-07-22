@@ -1,0 +1,104 @@
+<!doctype html><html xmlns=http://www.w3.org/1999/xhtml xml:lang=en lang=en-gb><head>
+<meta charset=utf-8>
+<title>Why You Should Be Using Terraform Remote State - Matt Burgess</title>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet type=text/css href=/css/spartan.min.css>
+<link rel=apple-touch-icon-precomposed sizes=144x144 href=/images/favicon.png>
+<link rel="shortcut icon" type=image/x-icon href=/images/favicon.png>
+<meta name=description content="Hey, I'm Matt Burgess. A cloud-native solutions architect and software engineer. Specialises in modernizing applications into performant, observable and well architected platforms.">
+<meta name=keywords content>
+<meta name=author content="Matt Burgess">
+<meta name=generator content="Hugo 0.86.0">
+<meta property="og:title" content="Why You Should Be Using Terraform Remote State">
+<meta property="og:description" content="Hey, I'm Matt Burgess. A cloud-native solutions architect and software engineer. Specialises in modernizing applications into performant, observable and well architected platforms.">
+<meta property="og:type" content="blog">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://mattburgess.dev/post/why-you-should-be-using-terraform-remote-state/">
+</head><body class="font-sans antialiased text-gray-700 dark:bg-gray-800 dark:text-gray-200">
+<header class="p-8 py-4 bg-gray-50 dark:bg-gray-900"><div class="flex sm:flex-row flex-col items-center w-full">
+<div class="flex-grow flex items-center">
+<a href=https://mattburgess.dev/ class="group font-medium transition-colors text-gray-900 dark:text-gray-200 hover:text-yellow-500 antialiased flex items-center">
+<span class="flex font-semibold items-center relative">
+<span>Matt Burgess</span>
+<span class="h-0.5 w-2/12 bg-yellow-500 block bottom-0 left-0 absolute group-hover:w-full transition-all"></span>
+</span>
+</a>
+<div class=ml-4><div class="flex items-center space-x-3 text-gray-400">
+<a href=https://twitter.com/itsmattburgess class=hover:text-blue-400 target=_blank title=Twitter rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958.0 002.163-2.723c-.951.555-2.005.959-3.127 1.184A4.92 4.92.0 0011.78 8.288C7.69 8.095 4.067 6.13 1.64 3.162A4.822 4.822.0 00.974 5.637c0 1.71.87 3.213 2.188 4.096A4.904 4.904.0 01.934 9.117v.06a4.923 4.923.0 003.946 4.827 4.996 4.996.0 01-2.212.085 4.936 4.936.0 004.604 3.417A9.867 9.867.0 011.17 19.611c-.39.0-.779-.023-1.17-.067a13.995 13.995.0 007.557 2.209c9.053.0 13.998-7.496 13.998-13.985.0-.21.0-.42-.015-.63A9.935 9.935.0 0024 4.59z"/></svg>
+</a>
+<a href=https://linkedin.com/in/itsmattburgess class=hover:text-blue-600 target=_blank title=Twitter rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601.0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144.0-2.063-.926-2.063-2.065.0-1.138.92-2.063 2.063-2.063 1.14.0 2.064.925 2.064 2.063.0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0h.003z"/></svg>
+</a>
+<a href=https://github.com/itsmattburgess class="hover:text-gray-900 dark:hover:text-gray-100" target=_blank title=Github rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63.0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577.0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93.0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176.0.0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22.0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22.0 1.606-.015 2.896-.015 3.286.0.315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+</a>
+</div></div>
+</div>
+<div class="mt-4 sm:mt-0">
+<aside>
+<ul class="space-x-4 flex items-center uppercase text-xs text-gray-500 font-semibold">
+<li>
+<a href=/ class="hover:text-yellow-500 hover:underline">
+<span>Blog</span>
+</a>
+</li>
+</ul>
+</aside></div>
+</div></header>
+<main id=content>
+<div class="mx-auto max-w-screen-md p-8">
+<div class="mb-8 text-center">
+<div class="flex items-center font-medium text-gray-400 leading-relaxed mb-2 space-x-4 justify-center">
+<time datetime="2017-11-28 23:10:18 +0100 +0100">28th November 2017</time>
+<div class="text-gray-400 font-bold">&#183;</div>
+<div>5 minute read</div>
+</div>
+<div class="text-4xl font-extrabold text-gray-900 dark:text-gray-200 leading-snug">Why You Should Be Using Terraform Remote State</div>
+<div class="mt-6 flex space-x-2 justify-center">
+<a class="bg-gray-100 dark:bg-gray-700 hover:bg-opacity-100 text-sm font-medium py-2 px-3 rounded bg-opacity-50" href=https://mattburgess.dev/tags/terraform>Terraform</a>
+</div>
+</div>
+<article>
+<p><a href=https://terraform.io>Terraform</a> is an amazing tool which has transformed the way we manage infrastructure. In this opinionated article, i’m going to explain why I personally believe <em>everyone</em> should be using remote state in Terraform.</p>
+<p>Chances are, that, if you are using Terraform within your team you’re probably already using remote state. If you’re not, then pause everything and read on! It’s also likely that if you are just starting out with Terraform or you work on your own, you’re using the out of the box behaviour by storing ‘state’ on your local filesystem in a file called terraform.tfstate</p>
+<p>So, maybe you’re wondering what ‘state’ is. In Terraform terms, state is a snapshot of your infrastructure from when you last ran the terraform apply command i.e. your s3 buckets, VPCs, DNS records and maybe even your Github repositories. All it really is, is a JSON file which contains details about every configuration attribute of each managed resource since you last applied your terraform scripts. It’s vitally important since it’s how Terraform understands what’s changed, what is new and what is no longer needed.</p>
+<p><img src=/images/terraform-state.png alt="Terraform State"></p>
+<h2 id=so-we-all-understand-the-importance-of-state-why-would-i-want-remote-state>So, we all understand the importance of state. Why would I want ‘remote state?’</h2>
+<p>Remote state comes into play through the use of ‘backends’. A backend tells Terraform that the snapshot of your infrastructure should no longer live in the <code>terraform.tfstate</code> file on your local filesystem and that it should be stored in a remote location, such as Amazon S3. I personally use the S3 backend for all my projects so I’ll concentrate on that backend provider here, but the same principles apply to all the supported backends.</p>
+<p>The main benefit you achieve with remote state is having a centralised source of truth. If you work in a team, or use more than one machine this is so important. When running the <code>terraform apply</code> command, the state of your infrastructure after any changes is uploaded to your backend, meaning that any person or machine which wants make further changes will know what changes have already been applied and will not inadvertently remove or undo them.</p>
+<h1 id=heres-a-practical-example-of-what-problem-remote-state-solves>Here’s a practical example of what problem remote state solves</h1>
+<p>Let’s say you have a website hosted in an S3 bucket and you use a MacBook and an iMac. You have your Terraform repository on both machines running local state with a single S3 bucket which both machines know about (from their own state files). In the morning you decide, whilst using your MacBook, that you want to enable logging on one of your buckets. You add the attributes to your resource and apply your changes. You return later that day, to add a new S3 bucket. This time, you decide that you want to use your iMac — so you create the new resource and run <code>terraform plan</code>. What you’ll see this time is that Terraform is going to create your new bucket as expected, but you’re also going to remove the logging from your existing bucket. This is because your state file on your iMac isn’t aware that the bucket should have logging enabled so it’ll remove it to ensure the resource is built to the specification which it has been told about. In contrast, when you have a backend configured the first thing Terraform does is read the state from the remote server, so it’ll always be working with the most up to date information.</p>
+<p>Now, you may be thinking that surely the easiest solution to this is to commit your <code>terraform.tfstate</code> file to your git repository. You’re right that will solve the problem, but this method has some serious drawbacks. The first and most important one is that your state file can sometimes include secret details, such as database passwords or API keys. You definitely do not want this kind of information in version control. Secondly, if you, or a teammate of yours forgets to commit their <code>terraform.tfstate</code> file you’ll end up in exactly the same situation as before, potentially making unwanted changes.</p>
+<h2 id=theres-more-advantages-to-remote-state>There’s more advantages to remote state</h2>
+<p>These advantages are mainly a plus for teams using Terraform, but still apply to lone wolves going it alone.</p>
+<p>A backend such as S3 allows you to encrypt your files in transit and at rest adding confidence that any secrets stored in your state are less susceptible to falling into the wrong hands. Object versioning in S3 also provides a valuable resource for understanding and debugging what was changed between each terraform apply if a change negatively impacts your configuration.</p>
+<p>Storing your state remotely also adds an increased layer of durability, it’s a lot harder to accidentally delete your tfstate file when it is stored remotely.</p>
+<p>Locking support (for most backend providers) is essential when working in teams. It prevents anybody from writing to the remote state file whilst someone else is writing to it. This is to prevent data corruption that could occur if two people were applying their changes at the same time. With locking enabled, Terraform will make everyone else wait until your changes have been applied and written to state so that everyone’s plan of changes is always accurate. It’s the technological equivalent of the <a href=https://en.wikipedia.org/wiki/Token_(railway_signalling)>token system used on the railways</a>.</p>
+<h2 id=so-how-do-i-setup-remote-state>So, how do I setup remote state?</h2>
+<p>I’m sure by now you agree that there is no reason not to configure remote state and are wondering how we configure it. Thankfully Terraform, like everything else it does, makes this painless.</p>
+<p>Firstly, we need to tell Terraform which backend to use. We do this by adding the below snippet to our main terraform file. If you haven’t already, you should checkout the <a href=https://www.terraform.io/docs/backends/types/index.html>Terraform backend documentation</a> to learn about how you can configure each provider.</p>
+<pre><code>terraform {
+    backend &quot;s3&quot; {
+        bucket = &quot;my-bucket-name&quot;
+        key = &quot;filename.tfstate&quot;
+        region = &quot;eu-west-2&quot;
+        encrypt = true
+    }
+}
+</code></pre><p>The code example above, assumes that you have created an S3 bucket named ‘my-bucket-name’ and that you want to store your state in an encrypted file called ‘filename.tfstate’.</p>
+<p>Thats it! You’re now using S3 as a backend to store your remote state. If you already have a local <code>terraform.tfstate</code> file which you want to use in your remote state for the first time you can use the push command to upload that state to the remote server.</p>
+<pre><code>terraform init
+terraform state push
+</code></pre>
+</article>
+</div>
+</main><footer class="text-center py-8 text-xs font-medium text-gray-500 flex items-center flex-col">
+<div class=mb-2><div class="flex items-center space-x-3 text-gray-400">
+<a href=https://twitter.com/itsmattburgess class=hover:text-blue-400 target=_blank title=Twitter rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958.0 002.163-2.723c-.951.555-2.005.959-3.127 1.184A4.92 4.92.0 0011.78 8.288C7.69 8.095 4.067 6.13 1.64 3.162A4.822 4.822.0 00.974 5.637c0 1.71.87 3.213 2.188 4.096A4.904 4.904.0 01.934 9.117v.06a4.923 4.923.0 003.946 4.827 4.996 4.996.0 01-2.212.085 4.936 4.936.0 004.604 3.417A9.867 9.867.0 011.17 19.611c-.39.0-.779-.023-1.17-.067a13.995 13.995.0 007.557 2.209c9.053.0 13.998-7.496 13.998-13.985.0-.21.0-.42-.015-.63A9.935 9.935.0 0024 4.59z"/></svg>
+</a>
+<a href=https://linkedin.com/in/itsmattburgess class=hover:text-blue-600 target=_blank title=Twitter rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601.0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144.0-2.063-.926-2.063-2.065.0-1.138.92-2.063 2.063-2.063 1.14.0 2.064.925 2.064 2.063.0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0h.003z"/></svg>
+</a>
+<a href=https://github.com/itsmattburgess class="hover:text-gray-900 dark:hover:text-gray-100" target=_blank title=Github rel=noopener><svg class="w-4 h-4" fill="currentcolor" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63.0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577.0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93.0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176.0.0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22.0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22.0 1.606-.015 2.896-.015 3.286.0.315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+</a>
+</div></div>
+Copyright © 2021 Matt Burgess. All Rights Reserved.
+</div></body>
+</html>
