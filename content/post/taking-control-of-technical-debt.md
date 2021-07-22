@@ -3,6 +3,8 @@ title: "Taking Control of Technical Debt"
 date: 2017-12-04T23:04:33+01:00
 draft: false
 thumbnail: /images/debt.png
+tags:
+- Development
 ---
 
 I just wanted to take a moment to write a very brief article regarding every developers *favourite* subject — Technical Debt. For anyone unfamiliar with the term, simply put its the cost of achieving a goal quickly without 'doing it the proper way'. In a simple example, imagine you have a client which offers to pay for a new service, but they need it to be delivered quickly. You know that you could 'hack' together a solution that would do the job in a couple of days — but you'd like to do it a cleaner, better way, but it would take twice as long. In order to win the business, you'd probably agree to do it the quick way and clean it up later. This is debt is a technical sense, that you pay off by cleaning up the solution and ultimately doing it a way you're happy with.

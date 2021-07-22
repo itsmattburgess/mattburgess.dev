@@ -3,6 +3,9 @@ title: "Installing Jenkins on Amazon Linux"
 date: 2017-11-26T23:45:52+01:00
 draft: false
 thumbnail: /images/jenkins-amzn.png
+tags:
+- AWS
+- Jenkins
 ---
 If you’re looking to install Jenkins on an instance of Amazon Linux, there are a few more steps you’ll need to perform compared to installing Jenkins on a ubuntu instance.
 

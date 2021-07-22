@@ -3,6 +3,9 @@ title: "Hosting a HTTPS website using AWS S3 and CloudFront"
 date: 2017-11-21T23:45:52+01:00
 draft: false
 thumbnail: /images/cloudfront.png
+tags:
+- AWS
+- CloudFront
 ---
 I recently decided that it was time to setup a website for hosting my resume and entering the world of blogging to share my knowledge and learn from others. I had three requirements. First, I wanted to use AWS S3 to host my website. Secondly, I wanted my website HTTPS enabled as I strongly believe that every website should be — there is simply no reason not to be nowadays, especially since LetsEncrypt started their awesome work. And Finally, I wanted to use multiple domains I own to point to the same website.
 So, how can we achieve this?

@@ -2,7 +2,9 @@
 title: "Why You Should Be Using Terraform Remote State"
 date: 2017-11-28T23:10:18+01:00
 draft: false
-thumbnail: images/terraform.png
+thumbnail: /images/terraform.png
+tags:
+  - Terraform
 ---
 
 [Terraform](https://terraform.io) is an amazing tool which has transformed the way we manage infrastructure. In this opinionated article, i’m going to explain why I personally believe *everyone* should be using remote state in Terraform.
