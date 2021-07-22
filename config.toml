@@ -1,24 +1,21 @@
+theme = "github.com/itsmattburgess/hugo-theme-spartan"
 baseURL = "https://mattburgess.dev/"
 title = "Matt Burgess"
 copyright = "Copyright © {year} Matt Burgess. All Rights Reserved."
 summaryLength = 5
-
-# Novela settings
-theme = "github.com/itsmattburgess/hugo-theme-spartan"
+enableEmoji = true
 
 [params]
 github_username = "itsmattburgess"
 twitter_username = "itsmattburgess"
 linkedin_username = "itsmattburgess"
 intro = "A cloud-native solutions architect and software engineer. Specialises in modernizing applications into performant, observable and well architected platforms."
+description = "Hey, I'm Matt Burgess. A cloud-native solutions architect and software engineer. Specialises in modernizing applications into performant, observable and well architected platforms."
+oglocale = "en_GB"
+ogtype= "blog"
+author = "Matt Burgess"
 
 [[menu.main]]
   name = "Blog"
   url = "/"
   weight = 1
-
-[[menu.main]]
-  name = "About"
-  url = "/page/about/"
-  weight = 2
-
