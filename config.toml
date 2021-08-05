@@ -14,6 +14,7 @@ description = "Hey, I'm Matt Burgess. A cloud-native solutions architect and sof
 oglocale = "en_GB"
 ogtype= "blog"
 author = "Matt Burgess"
+images = ['images/avatar.png']
 
 [[menu.main]]
   name = "Blog"
