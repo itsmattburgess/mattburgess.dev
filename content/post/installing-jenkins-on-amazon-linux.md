@@ -3,6 +3,7 @@ title: "Installing Jenkins on Amazon Linux"
 date: 2017-11-26T23:45:52+01:00
 draft: false
 thumbnail: /images/jenkins-amzn.png
+ogimage: /images/jenkins-amzn.png
 tags:
 - AWS
 - Jenkins

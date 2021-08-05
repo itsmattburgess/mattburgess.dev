@@ -3,6 +3,7 @@ title: "Hosting a HTTPS website using AWS S3 and CloudFront"
 date: 2017-11-21T23:45:52+01:00
 draft: false
 thumbnail: /images/cloudfront.png
+ogimage: /images/cloudfront.png
 tags:
 - AWS
 - CloudFront

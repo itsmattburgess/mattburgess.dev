@@ -3,6 +3,7 @@ title: "Taking Control of Technical Debt"
 date: 2017-12-04T23:04:33+01:00
 draft: false
 thumbnail: /images/debt.png
+ogimage: /images/debt.png
 tags:
 - Development
 ---
