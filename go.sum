@@ -36,3 +36,5 @@ github.com/itsmattburgess/hugo-theme-spartan v0.0.0-20210805195835-b4462fc11a0f 
 github.com/itsmattburgess/hugo-theme-spartan v0.0.0-20210805195835-b4462fc11a0f/go.mod h1:DqTNkG5BISZOSw3rAimpptv64VKrTEV7J43FulfFIvk=
 github.com/itsmattburgess/hugo-theme-spartan v0.0.0-20210805202328-bd1a7e40ec60 h1:4f5aORtTctnEOhEJWUPYBXkojWBQHCxBbNx2UjAJRsk=
 github.com/itsmattburgess/hugo-theme-spartan v0.0.0-20210805202328-bd1a7e40ec60/go.mod h1:DqTNkG5BISZOSw3rAimpptv64VKrTEV7J43FulfFIvk=
+github.com/itsmattburgess/hugo-theme-spartan v1.0.0 h1:q2RNkxF+SeSbSo7ON3JpWw8Wipvh9CpjatD3ZDYN9Ts=
+github.com/itsmattburgess/hugo-theme-spartan v1.0.0/go.mod h1:DqTNkG5BISZOSw3rAimpptv64VKrTEV7J43FulfFIvk=

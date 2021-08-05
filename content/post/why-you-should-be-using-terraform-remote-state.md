@@ -2,8 +2,8 @@
 title: "Why You Should Be Using Terraform Remote State"
 date: 2017-11-28T23:10:18+01:00
 draft: false
-thumbnail: /images/terraform.png
-ogimage: /images/terraform.png
+images: 
+  - /images/terraform.png
 tags:
   - Terraform
 ---
